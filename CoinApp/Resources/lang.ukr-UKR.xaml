@@ -34,6 +34,9 @@
     <v:String x:Key="CoinRank">Рейтинг на ринку:</v:String>
     <v:String x:Key="MarketCap">Капіталізація:</v:String>
     <v:String x:Key="CoinSup">Запас:</v:String>
+    <v:String x:Key="PriceHistoryTitle">Історія ціни</v:String>
+    <v:String x:Key="ResetHistoryView">Скинути вигляд</v:String>
+    <v:String x:Key="HistoryZoomHint">Колесо миші масштабує графік; перетягуйте, щоб рухатися по історії.</v:String>
 
     <!--Left Menu-->
     <v:String x:Key="ExitTb">Вихід</v:String>

@@ -173,13 +173,19 @@ namespace CoinApp.Services
 
         public async Task<List<HistoricalPriceModel>> GetMonthlyHistoricalPricesAsync(string id, DateTime startTime, DateTime endTime)
         {
+            return await GetHistoricalPricesAsync(id, startTime, endTime);
+        }
+
+        public async Task<List<HistoricalPriceModel>> GetHistoricalPricesAsync(string id, DateTime startTime, DateTime endTime)
+        {
             try
             {
                 long startUnixTime = new DateTimeOffset(startTime).ToUnixTimeMilliseconds();
                 long endUnixTime = new DateTimeOffset(endTime).ToUnixTimeMilliseconds();
+                var interval = GetCoinCapHistoryInterval(startTime, endTime);
 
                 return (await GetCoinCapListAsync<HistoricalPriceModel>(
-                    $"v2/assets/{Uri.EscapeDataString(id)}/history?interval=d1&start={startUnixTime}&end={endUnixTime}")).ToList();
+                    $"v2/assets/{Uri.EscapeDataString(id)}/history?interval={interval}&start={startUnixTime}&end={endUnixTime}")).ToList();
             }
             catch
             {
@@ -358,13 +364,21 @@ namespace CoinApp.Services
         private async Task<List<HistoricalPriceModel>> GetCryptoCompareHistoricalPricesAsync(string id, DateTime startTime, DateTime endTime)
         {
             var symbol = await GetSymbolForCurrencyAsync(id);
-            var days = Math.Max(1, Math.Min(90, (int)Math.Ceiling((endTime - startTime).TotalDays)));
+            var range = endTime - startTime;
+            var endpoint = range.TotalDays <= 14 ? "histohour" : "histoday";
+            var unitCount = endpoint == "histohour"
+                ? Math.Max(1, Math.Min(2000, (int)Math.Ceiling(range.TotalHours)))
+                : Math.Max(1, Math.Min(2000, (int)Math.Ceiling(range.TotalDays)));
+            var endUnixTime = new DateTimeOffset(endTime).ToUnixTimeSeconds();
+
             var json = await GetJsonAsync(
                 _cryptoCompareClient,
-                $"data/v2/histoday?fsym={Uri.EscapeDataString(symbol)}&tsym=USD&limit={days}",
+                $"data/v2/{endpoint}?fsym={Uri.EscapeDataString(symbol)}&tsym=USD&limit={unitCount}&toTs={endUnixTime}",
                 HistoricalDataTtl);
             var response = JObject.Parse(json);
             var prices = response["Data"]?["Data"] as JArray ?? new JArray();
+            long startUnixTimeMs = new DateTimeOffset(startTime).ToUnixTimeMilliseconds();
+            long endUnixTimeMs = new DateTimeOffset(endTime).ToUnixTimeMilliseconds();
 
             return prices
                 .Select(price => new HistoricalPriceModel
@@ -372,7 +386,7 @@ namespace CoinApp.Services
                     Time = ReadLong(price["time"]) * 1000L,
                     PriceUsd = ReadDecimal(price["close"])
                 })
-                .Where(price => price.Time > 0)
+                .Where(price => price.Time >= startUnixTimeMs && price.Time <= endUnixTimeMs)
                 .ToList();
         }
 
@@ -486,6 +500,28 @@ namespace CoinApp.Services
         private static string NormalizeId(string id)
         {
             return id.Trim().ToLowerInvariant();
+        }
+
+        private static string GetCoinCapHistoryInterval(DateTime startTime, DateTime endTime)
+        {
+            var totalDays = (endTime - startTime).TotalDays;
+
+            if (totalDays <= 2)
+            {
+                return "h1";
+            }
+
+            if (totalDays <= 14)
+            {
+                return "h6";
+            }
+
+            if (totalDays <= 90)
+            {
+                return "d1";
+            }
+
+            return "d1";
         }
 
         private static string ReadString(JToken? token)

@@ -45,10 +45,10 @@
                     <!-- Додаю картинку -->
                     <Image Source="/Images/MainIconImg.jpg" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,20,0,40" RenderTransformOrigin="-1.4,0.458" Height="36" Width="25"/>
                     <!-- Додаю текстову надпись -->
-                    <TextBlock Text="Coin App" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" Margin="5,20,0,40"/>
+                    <TextBlock Text="Coin App" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource AppTextBrush}" Margin="5,20,0,40"/>
                 </Grid>
 
-                <Border Grid.Row="1" Background="{DynamicResource AppPrimaryBrush}" CornerRadius="0 10 10 0">
+                <Border Grid.Row="1" Background="{DynamicResource AppPrimaryBrush}" CornerRadius="0 18 18 0">
                     <DockPanel>
 
                         <!--Menu titles and button-->
@@ -58,7 +58,7 @@
                         </StackPanel>
 
                         <!--Menu separator-->
-                        <Separator Margin="25" DockPanel.Dock="Top"  Height="8" Background="#D0D0D0"/>
+                        <Separator Margin="26 16 26 20" DockPanel.Dock="Top" Height="1" Background="#80FFFFFF"/>
 
                         <!--Menu buttons-->
                         <StackPanel DockPanel.Dock="Top">
@@ -97,36 +97,65 @@
                 <TextBlock x:Name="CoinDetPageTitle" Text="{DynamicResource CoinDetPageTitle}" Grid.Row="1" FontSize="32" FontWeight="SemiBold" Margin="40,20,0,0" HorizontalAlignment="Left" Foreground="{DynamicResource AppTextBrush}" Grid.RowSpan="6"/>
 
                 <!--Separator-->
-                <Separator Height="6" Grid.Row="2" Background="{DynamicResource AppSeparatorBrush}" Margin="0 75 0 10"/>
+                <Separator Height="1" Grid.Row="2" Background="{DynamicResource AppSeparatorBrush}" Margin="0 72 0 14"/>
 
                 <Border Style="{StaticResource CoinBorder}" Grid.Row="4">
                     
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width = "*"/>
-                            <ColumnDefinition Width = "auto" MinWidth="250"/>
+                            <ColumnDefinition Width="300" MinWidth="280"/>
                         </Grid.ColumnDefinitions>
 
                         <!-- Панель завантаження -->
                         <Grid x:Name="LoadingPanel" Visibility="Collapsed" Background="Transparent" Opacity="0.8" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 115" Grid.ColumnSpan="2">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="300" Height="150">
                                 <!-- Повідомленя -->
-                                <TextBlock Text="{DynamicResource LoadingPanel}" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="11 -3 0 0"/>
-                                <!-- Полоса виконання -->
-                                <ProgressBar IsIndeterminate="True" Width="200" Height="20" Margin="10" Foreground="Blue" BorderBrush="#15354a" BorderThickness="2" Background="#bfd3e0"/>
+                                <TextBlock Text="{DynamicResource LoadingPanel}" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{DynamicResource AppTextBrush}" Margin="0 0 0 14"/>
+                                <ProgressBar IsIndeterminate="True" Style="{StaticResource CircularLoadingIndicator}"/>
                             </StackPanel>
                         </Grid>
 
                         <!-- Container for the chart -->
-                        <Grid x:Name="ChartContainer" Grid.Column="0">
+                        <Grid x:Name="ChartContainer" Grid.Column="0" Margin="14 12 6 12">
                             <Grid.Resources>
+                                <Style x:Key="historyRangeButton" TargetType="Button">
+                                    <Setter Property="Background" Value="{DynamicResource AppInputBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource AppTextBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="MinWidth" Value="46"/>
+                                    <Setter Property="Height" Value="32"/>
+                                    <Setter Property="Padding" Value="12 0"/>
+                                    <Setter Property="Margin" Value="3 0"/>
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="9">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource AppTopHoverBrush}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
                                 <Style TargetType="lvc:LineSeries">
-                                    <Setter Property="StrokeThickness" Value="5"></Setter>
-                                    <Setter Property="Stroke" Value="#323ca8"></Setter>
-                                    <Setter Property="Fill" Value="#b5b9ff"></Setter>
-                                    <Setter Property="PointGeometrySize" Value="16"></Setter>
-                                    <Setter Property="PointForeground" Value="#e6e7fa"></Setter>
-                                    <Setter Property="LineSmoothness" Value="1"></Setter>
+                                    <Setter Property="StrokeThickness" Value="3"></Setter>
+                                    <Setter Property="Stroke" Value="#4F6AF7"></Setter>
+                                    <Setter Property="Fill" Value="#3B4F6AF7"></Setter>
+                                    <Setter Property="PointGeometrySize" Value="8"></Setter>
+                                    <Setter Property="PointForeground" Value="#F5F6FF"></Setter>
+                                    <Setter Property="LineSmoothness" Value="0.65"></Setter>
                                 </Style>
                                 <Style TargetType="lvc:Axis">
                                     <Setter Property="ShowLabels" Value="True"></Setter>
@@ -139,77 +168,245 @@
                                 </Style>
                             </Grid.Resources>
 
-                            <Border Background="{DynamicResource AppCardSecondaryBrush}" Margin="10" CornerRadius="22">
-                                <lvc:CartesianChart Series="{Binding SeriesCollection}" Margin="7 0 -15 0">
-                                    <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Labels="{Binding XAxis.Labels}"/>
-                                    </lvc:CartesianChart.AxisX>
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis LabelFormatter="{Binding YAxis.LabelFormatter}" />
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0" Margin="4 2 4 12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Vertical">
+                                    <TextBlock Text="{DynamicResource PriceHistoryTitle}"
+                                               Foreground="{DynamicResource AppTextBrush}"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding HistorySummary}"
+                                               Foreground="{DynamicResource AppMutedTextBrush}"
+                                               FontSize="12"
+                                               Margin="0 3 0 0"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="12 0 0 0">
+                                    <Button x:Name="Range7DButton" Style="{StaticResource historyRangeButton}" Content="7D" Tag="7D" Click="HistoryRange_Button_Click"/>
+                                    <Button x:Name="Range1MButton" Style="{StaticResource historyRangeButton}" Content="1M" Tag="1M" Click="HistoryRange_Button_Click"/>
+                                    <Button x:Name="Range3MButton" Style="{StaticResource historyRangeButton}" Content="3M" Tag="3M" Click="HistoryRange_Button_Click"/>
+                                    <Button x:Name="Range1YButton" Style="{StaticResource historyRangeButton}" Content="1Y" Tag="1Y" Click="HistoryRange_Button_Click"/>
+                                    <Button Style="{StaticResource topButton}" Click="ResetHistoryView_Button_Click" ToolTip="{DynamicResource ResetHistoryView}">
+                                        <Icon:PackIconMaterial Kind="BackupRestore" Width="22" Height="22"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <Border Grid.Row="1" Background="{DynamicResource AppInputBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="18" Padding="10" ToolTip="{DynamicResource HistoryZoomHint}">
+                                <Grid>
+                                    <lvc:CartesianChart x:Name="HistoricalChart"
+                                                        Series="{Binding SeriesCollection}"
+                                                        Zoom="X"
+                                                        Pan="X"
+                                                        LegendLocation="None"
+                                                        Margin="0">
+                                        <lvc:CartesianChart.AxisX>
+                                            <lvc:Axis Title="{Binding XAxis.Title}"
+                                                      Labels="{Binding XAxis.Labels}"
+                                                      Separator="{Binding XAxis.Separator}"/>
+                                        </lvc:CartesianChart.AxisX>
+                                        <lvc:CartesianChart.AxisY>
+                                            <lvc:Axis Title="{Binding YAxis.Title}"
+                                                      LabelFormatter="{Binding YAxis.LabelFormatter}" />
+                                        </lvc:CartesianChart.AxisY>
+                                    </lvc:CartesianChart>
+
+                                    <ProgressBar x:Name="HistoryLoadingBar"
+                                                 Visibility="Collapsed"
+                                                 IsIndeterminate="True"
+                                                 Style="{StaticResource CircularLoadingIndicator}"
+                                                 Width="34"
+                                                 Height="34"
+                                                 HorizontalAlignment="Right"
+                                                 VerticalAlignment="Top"
+                                                 Margin="0 12 14 0"/>
+                                </Grid>
                             </Border>
                         </Grid>
 
-                        <Grid Grid.Column="1" x:Name="CoinDescriptionContainer">
-                            <Border Background="{DynamicResource AppCardAccentBrush}" Margin="5, 10, 10, 10" CornerRadius="22">
-                                <Grid Margin="15">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width = "auto" MinWidth="110" MaxWidth="160"/>
-                                        <ColumnDefinition Width = "auto" MinWidth="110" MaxWidth="160"/>
-                                    </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="1" x:Name="CoinDescriptionContainer" Margin="6 12 12 12">
+                            <Grid.Resources>
+                                <Style x:Key="metricLabelText" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource AppMutedTextBrush}"/>
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                                <Style x:Key="metricValueText" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource AppTextBrush}"/>
+                                    <Setter Property="FontSize" Value="13"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                </Style>
+                                <Style x:Key="primaryActionButton" TargetType="Button">
+                                    <Setter Property="Background" Value="{DynamicResource AppPrimaryBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource AppMenuTextBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AppPrimaryHoverBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Height" Value="48"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource AppPrimaryHoverBrush}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Resources>
 
+                            <Border Background="{DynamicResource AppCardBrush}"
+                                    BorderBrush="{DynamicResource AppBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="18"
+                                    Padding="18">
+                                <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="50" />
-                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
-                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="{Binding Coin.Name}" FontWeight="Bold" FontSize="20" VerticalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2"/>
-                                    <Separator Margin="0 10 0 0" Height="4" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Row="1"/>
+                                    <DockPanel Grid.Row="0" LastChildFill="True">
+                                        <Border DockPanel.Dock="Right"
+                                                Background="{DynamicResource AppInputBrush}"
+                                                BorderBrush="{DynamicResource AppBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10"
+                                                Padding="10 5"
+                                                Margin="10 2 0 0">
+                                            <TextBlock Text="{Binding Coin.Symbol}"
+                                                       Foreground="{DynamicResource AppTextBrush}"
+                                                       FontSize="12"
+                                                       FontWeight="Bold"/>
+                                        </Border>
 
-                                    <TextBlock x:Name="CoinSym" Text="{DynamicResource CoinSym}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Coin.Symbol}" FontSize="12" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
-                                    <Separator Margin="0 10 0 0" Height="4" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  Grid.Row="2"/>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Coin.Name}"
+                                                       Foreground="{DynamicResource AppTextBrush}"
+                                                       FontWeight="Bold"
+                                                       FontSize="24"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{DynamicResource CoinDetPageTitle}"
+                                                       Foreground="{DynamicResource AppMutedTextBrush}"
+                                                       FontSize="12"
+                                                       Margin="0 2 0 0"/>
+                                        </StackPanel>
+                                    </DockPanel>
 
-                                    <TextBlock x:Name="CoinPrice" Text="{DynamicResource CoinPrice}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Coin.PriceUsd, StringFormat={}{0:F2} \$}" FontSize="12" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right"/>
-                                    <Separator Margin="0 10 0 0" Height="4" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  Grid.Row="3"/>
+                                    <Border Grid.Row="1"
+                                            Background="{DynamicResource AppInputBrush}"
+                                            BorderBrush="{DynamicResource AppBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="14"
+                                            Padding="14"
+                                            Margin="0 18 0 14">
+                                        <StackPanel>
+                                            <TextBlock x:Name="CoinPrice"
+                                                       Text="{DynamicResource CoinPrice}"
+                                                       Foreground="{DynamicResource AppMutedTextBrush}"
+                                                       FontSize="12"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Coin.PriceUsd, StringFormat={}{0:F2} \$}"
+                                                       Foreground="{DynamicResource AppTextBrush}"
+                                                       FontSize="25"
+                                                       FontWeight="Bold"
+                                                       Margin="0 4 0 8"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Icon:PackIconMaterial Kind="TrendingUp"
+                                                                       Foreground="{DynamicResource AppAccentBrush}"
+                                                                       Width="16"
+                                                                       Height="16"
+                                                                       Margin="0 1 7 0"/>
+                                                <TextBlock x:Name="CoinPriceCh"
+                                                           Text="{DynamicResource CoinPriceCh}"
+                                                           Foreground="{DynamicResource AppMutedTextBrush}"
+                                                           FontSize="12"
+                                                           Margin="0 0 6 0"/>
+                                                <TextBlock Text="{Binding Coin.ChangePercent24Hr, StringFormat={}{0:F2} \%}"
+                                                           Foreground="{DynamicResource AppTextBrush}"
+                                                           FontSize="12"
+                                                           FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
 
-                                    <TextBlock x:Name="CoinPriceCh" Text="{DynamicResource CoinPriceCh}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Coin.ChangePercent24Hr, StringFormat={}{0:F2} \%}" FontSize="12" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right"/>
-                                    <Separator Margin="0 10 0 0" Height="4" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  Grid.Row="4"/>
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="42"/>
+                                        </Grid.RowDefinitions>
 
-                                    <TextBlock x:Name="CoinVol" Text="{DynamicResource CoinVol}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Coin.VolumeUsd24Hr, StringFormat={}{0:F2} \$}" FontSize="12" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right"/>
-                                    <Separator Margin="0 10 0 0" Height="4" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  Grid.Row="5"/>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Icon:PackIconMaterial Kind="SwapHorizontal" Width="15" Height="15" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0 0 8 0"/>
+                                            <TextBlock x:Name="CoinSym" Text="{DynamicResource CoinSym}" Style="{StaticResource metricLabelText}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Coin.Symbol}" Style="{StaticResource metricValueText}"/>
 
-                                    <TextBlock x:Name="CoinRank" Text="{DynamicResource CoinRank}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Coin.Rank}"  FontSize="12" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right"/>
-                                    <Separator Margin="0 10 0 0" Height="4" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  Grid.Row="6"/>
+                                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Icon:PackIconMaterial Kind="Poll" Width="15" Height="15" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0 0 8 0"/>
+                                            <TextBlock x:Name="CoinVol" Text="{DynamicResource CoinVol}" Style="{StaticResource metricLabelText}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Coin.VolumeUsd24Hr, StringFormat={}{0:F2} \$}" Style="{StaticResource metricValueText}"/>
 
-                                    <TextBlock x:Name="MarketCap" Text="{DynamicResource MarketCap}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Coin.MarketCapUsd, StringFormat={}{0:F2} \$}" FontSize="12" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right"/>
-                                    <Separator Margin="0 10 0 0" Height="4" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  Grid.Row="7"/>
+                                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Icon:PackIconMaterial Kind="Trophy" Width="15" Height="15" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0 0 8 0"/>
+                                            <TextBlock x:Name="CoinRank" Text="{DynamicResource CoinRank}" Style="{StaticResource metricLabelText}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Coin.Rank}" Style="{StaticResource metricValueText}"/>
 
-                                    <TextBlock x:Name="CoinSup" Text="{DynamicResource CoinSup}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Coin.Supply, StringFormat={}{0:F2}}" FontSize="12" VerticalAlignment="Center" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Right"/>
+                                        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Icon:PackIconMaterial Kind="CurrencyUsd" Width="15" Height="15" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0 0 8 0"/>
+                                            <TextBlock x:Name="MarketCap" Text="{DynamicResource MarketCap}" Style="{StaticResource metricLabelText}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Coin.MarketCapUsd, StringFormat={}{0:F2} \$}" Style="{StaticResource metricValueText}"/>
 
-                                    <Button Grid.Row="9" Grid.ColumnSpan="2" Height="50" Background="#2c6c99" BorderBrush="#1d4866" Click="Go_To_Market_Search_Page">
+                                        <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Icon:PackIconMaterial Kind="Database" Width="15" Height="15" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0 0 8 0"/>
+                                            <TextBlock x:Name="CoinSup" Text="{DynamicResource CoinSup}" Style="{StaticResource metricLabelText}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Coin.Supply, StringFormat={}{0:F2}}" Style="{StaticResource metricValueText}"/>
+                                    </Grid>
+
+                                    <Button Grid.Row="3"
+                                            Style="{StaticResource primaryActionButton}"
+                                            Margin="0 18 0 0"
+                                            Click="Go_To_Market_Search_Page">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <Icon:PackIconMaterial Kind="Cash" Style="{StaticResource menuButtonIcon}" Margin="0 2 10 0"/>
+                                            <Icon:PackIconMaterial Kind="Cart" Width="18" Height="18" Margin="0 0 10 0"/>
                                             <TextBlock x:Name="Markets_for_purch" Text="{DynamicResource Markets_for_purch}"/>
                                         </StackPanel>
                                     </Button>
-
                                 </Grid>
                             </Border>
                         </Grid>

@@ -35,6 +35,9 @@
     <v:String x:Key="CoinRank">Market rank:</v:String>
     <v:String x:Key="MarketCap">Market cap:</v:String>
     <v:String x:Key="CoinSup">Supply:</v:String>
+    <v:String x:Key="PriceHistoryTitle">Price history</v:String>
+    <v:String x:Key="ResetHistoryView">Reset view</v:String>
+    <v:String x:Key="HistoryZoomHint">Mouse wheel zooms the chart; drag to pan.</v:String>
     
     <!--Left Menu-->
     <v:String x:Key="ExitTb">Exit</v:String>

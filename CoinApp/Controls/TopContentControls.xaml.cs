@@ -282,43 +282,43 @@ namespace CoinApp.Controls
         {
             if (dark)
             {
-                SetBrush("AppSurfaceBrush", "#101820");
-                SetBrush("AppPanelBrush", "#20384A");
-                SetBrush("AppCardBrush", "#1B2733");
-                SetBrush("AppCardSecondaryBrush", "#162634");
-                SetBrush("AppCardAccentBrush", "#22394B");
-                SetBrush("AppInputBrush", "#111C26");
-                SetBrush("AppPopupBrush", "#17232E");
-                SetBrush("AppTextBrush", "#EEF4F8");
-                SetBrush("AppMutedTextBrush", "#A8B3BE");
-                SetBrush("AppBorderBrush", "#3E5364");
-                SetBrush("AppSeparatorBrush", "#31495A");
-                SetBrush("AppPrimaryBrush", "#245F82");
-                SetBrush("AppPrimaryHoverBrush", "#317AA5");
-                SetBrush("AppTopHoverBrush", "#253645");
-                SetBrush("AppAccentBrush", "#E07A45");
-                SetBrush("AppMenuTextBrush", "#F1F7FB");
-                SetBrush("AppGridLineBrush", "#3E5364");
+                SetBrush("AppSurfaceBrush", "#0E141B");
+                SetBrush("AppPanelBrush", "#162832");
+                SetBrush("AppCardBrush", "#121C25");
+                SetBrush("AppCardSecondaryBrush", "#16232D");
+                SetBrush("AppCardAccentBrush", "#172B31");
+                SetBrush("AppInputBrush", "#0F1821");
+                SetBrush("AppPopupBrush", "#121C25");
+                SetBrush("AppTextBrush", "#F4F7FA");
+                SetBrush("AppMutedTextBrush", "#9AA8B5");
+                SetBrush("AppBorderBrush", "#2B3D4B");
+                SetBrush("AppSeparatorBrush", "#263744");
+                SetBrush("AppPrimaryBrush", "#0F766E");
+                SetBrush("AppPrimaryHoverBrush", "#159A91");
+                SetBrush("AppTopHoverBrush", "#1D2B36");
+                SetBrush("AppAccentBrush", "#10B981");
+                SetBrush("AppMenuTextBrush", "#F8FAFC");
+                SetBrush("AppGridLineBrush", "#243642");
             }
             else
             {
-                SetBrush("AppSurfaceBrush", "#F0F8FF");
-                SetBrush("AppPanelBrush", "#71A0BF");
-                SetBrush("AppCardBrush", "#E3E3DE");
-                SetBrush("AppCardSecondaryBrush", "#D9EFFC");
-                SetBrush("AppCardAccentBrush", "#BEE3FA");
+                SetBrush("AppSurfaceBrush", "#F6F8FB");
+                SetBrush("AppPanelBrush", "#D8E8F0");
+                SetBrush("AppCardBrush", "#FFFFFF");
+                SetBrush("AppCardSecondaryBrush", "#F8FBFE");
+                SetBrush("AppCardAccentBrush", "#EEF6F7");
                 SetBrush("AppInputBrush", "#FFFFFF");
                 SetBrush("AppPopupBrush", "#FFFFFF");
-                SetBrush("AppTextBrush", "#121518");
-                SetBrush("AppMutedTextBrush", "#6E7783");
-                SetBrush("AppBorderBrush", "#999FA8");
-                SetBrush("AppSeparatorBrush", "#111111");
-                SetBrush("AppPrimaryBrush", "#28668F");
-                SetBrush("AppPrimaryHoverBrush", "#1D4866");
-                SetBrush("AppTopHoverBrush", "#DCDCDC");
-                SetBrush("AppAccentBrush", "#CC5500");
-                SetBrush("AppMenuTextBrush", "#ECE5FF");
-                SetBrush("AppGridLineBrush", "#808080");
+                SetBrush("AppTextBrush", "#111827");
+                SetBrush("AppMutedTextBrush", "#667085");
+                SetBrush("AppBorderBrush", "#D6DEE8");
+                SetBrush("AppSeparatorBrush", "#D9E1EA");
+                SetBrush("AppPrimaryBrush", "#0F766E");
+                SetBrush("AppPrimaryHoverBrush", "#155E75");
+                SetBrush("AppTopHoverBrush", "#E9F0F6");
+                SetBrush("AppAccentBrush", "#10B981");
+                SetBrush("AppMenuTextBrush", "#F8FAFC");
+                SetBrush("AppGridLineBrush", "#E7EDF4");
             }
         }
 
