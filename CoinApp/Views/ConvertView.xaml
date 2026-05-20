@@ -7,14 +7,19 @@
          mc:Ignorable="d"
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
          xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:controls="clr-namespace:CoinApp.Controls"
+         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
          WindowStartupLocation="CenterScreen"
          WindowStyle="None"
-         ResizeMode="NoResize"
-         AllowsTransparency="True"
-         Background="Transparent"
+         ResizeMode="CanResizeWithGrip"
+         AllowsTransparency="False"
+         Background="{DynamicResource AppSurfaceBrush}"
          Icon="/Images/MainIconImg.jpg"
-         Title="Coin App" Height="720" Width="1080">
-    <Border Background ="AliceBlue" CornerRadius="15" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseDown="Border_MouseDown">
+         Title="Coin App" Height="720" Width="1080" MinHeight="620" MinWidth="920">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0" CornerRadius="18" GlassFrameThickness="0" ResizeBorderThickness="8" UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Border Background="{DynamicResource AppSurfaceBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="18" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseDown="Border_MouseDown">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width = "250"/>
@@ -41,7 +46,7 @@
                     <TextBlock Text="Coin App" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" Margin="5,20,0,40"/>
                 </Grid>
 
-                <Border Grid.Row="1" Background="#28668f" CornerRadius="0 5 5 0">
+                <Border Grid.Row="1" Background="{DynamicResource AppPrimaryBrush}" CornerRadius="0 10 10 0">
                     <DockPanel>
 
                         <!--Menu titles and button-->
@@ -88,13 +93,13 @@
 
                 <!--Page title-->
                 <TextBlock x:Name="ConverterPageTitle"  Text="{DynamicResource ConverterPageTitle}" Grid.Row="1" FontSize="32" FontWeight="SemiBold" Margin="40,20,0,0"
-                HorizontalAlignment="Left" Foreground="#121518" Grid.RowSpan="6"/>
+                HorizontalAlignment="Left" Foreground="{DynamicResource AppTextBrush}" Grid.RowSpan="6"/>
 
                 <!--Separator-->
-                <Separator Height="8" Grid.Row="2" Background="Black" Margin="0 75 0 10"/>
+                <Separator Height="6" Grid.Row="2" Background="{DynamicResource AppSeparatorBrush}" Margin="0 75 0 10"/>
 
-                <Border Grid.Row="3" Grid.RowSpan="4" Background="#71a0bf" CornerRadius="20" Margin="10 10 10 10">
-                    <Border x:Name="ConvBorder" VerticalAlignment="Center" Background="#e3e3de" Width="400" Height="450" CornerRadius="40" Visibility="Visible">
+                <Border Grid.Row="3" Grid.RowSpan="4" Background="{DynamicResource AppPanelBrush}" CornerRadius="22" Margin="10">
+                    <Border x:Name="ConvBorder" VerticalAlignment="Center" Background="{DynamicResource AppCardBrush}" Width="400" MaxWidth="520" Height="450" CornerRadius="28" Visibility="Visible">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -108,7 +113,7 @@
 
                             <TextBlock x:Name="ConvertOneCurToAnotherTextBlock" Text="{DynamicResource ConvertOneCurToAnotherTextBlock}" Margin="0 40 0 10" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" FontWeight="Bold" FontSize="18"/>
                             <TextBlock x:Name="AmountTextBlock" Text="{DynamicResource AmountTextBlock}" Margin="40 30 0 10" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1" FontSize="15" FontWeight="SemiBold"/>
-                            <Border Grid.Row="2" Background="White" BorderBrush="Gray" BorderThickness="3"  Margin="35 5 40 10" Height="40" Width="320" CornerRadius="5">
+                            <Border Grid.Row="2" Background="{DynamicResource AppInputBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1.5"  Margin="35 5 40 10" Height="40" Width="320" CornerRadius="10">
                                 <TextBox x:Name="InputAmountTextBox" Style="{StaticResource textboxConvert}"/>
                             </Border>
                             <StackPanel Grid.Row="3" Orientation="Vertical" Width="320" Height="90">
@@ -117,17 +122,17 @@
                                     <TextBlock x:Name="ToTextBlock" Text="{DynamicResource ToTextBlock}" VerticalAlignment="Center" DockPanel.Dock="Right" HorizontalAlignment="Right" FontSize="15" FontWeight="SemiBold" Width="100"/>
                                 </DockPanel>
                                 <DockPanel>
-                                    <Border BorderBrush="Gray" BorderThickness="3" CornerRadius="4" Background="White" Height="40" Width="120">
+                                    <Border BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1.5" CornerRadius="10" Background="{DynamicResource AppInputBrush}" Height="40" Width="120">
                                         <ComboBox x:Name="CurrencyComboBox1" DockPanel.Dock="Left" Style="{StaticResource ComboBoxForConvert}"  ItemsSource="{Binding CurrencyNames}"
                                         SelectedItem="{Binding FirstSelectedCurrencyName, Mode=TwoWay}" GotFocus="ComboBox_GotFocus"
                                         LostFocus="ComboBox_LostFocus" />
                                     </Border>
-                                    <Button Margin="6 0 0 0" Height="40" Background="Gray" BorderBrush="#666565" BorderThickness="3" Width="68" Click="Swap_Button_Click">
+                                    <Button Margin="6 0 0 0" Height="40" Background="{DynamicResource AppPrimaryBrush}" Foreground="White" BorderBrush="{DynamicResource AppPrimaryHoverBrush}" BorderThickness="1.5" Width="68" Click="Swap_Button_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <Icon:PackIconMaterial Kind="SwapHorizontal" Height="30" Width="30"/>
                                         </StackPanel>
                                     </Button>
-                                    <Border BorderBrush="Gray" BorderThickness="3" Width="120" HorizontalAlignment="Right" CornerRadius="3" Background="White" Height="40">
+                                    <Border BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1.5" Width="120" HorizontalAlignment="Right" CornerRadius="10" Background="{DynamicResource AppInputBrush}" Height="40">
                                         <ComboBox x:Name="CurrencyComboBox2" DockPanel.Dock="Right" Style="{StaticResource ComboBoxForConvert}" HorizontalAlignment="Right"  ItemsSource="{Binding CurrencyNames}"
                                             SelectedItem="{Binding SecondSelectedCurrencyName, Mode=TwoWay}" GotFocus="ComboBox_GotFocus"
                                             LostFocus="ComboBox_LostFocus" />
@@ -135,7 +140,7 @@
                                 </DockPanel>
                             </StackPanel>
                             <TextBox x:Name="ResultTextBox" Grid.Row="4" Style="{StaticResource TextBoxForResultOfConvert}" />
-                            <Button x:Name="GetExchangeBut" Content="{DynamicResource GetExchangeBut}" Grid.Row="5" Background="Gray" BorderBrush="#666565" BorderThickness="3" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200" Height="50" Margin="0 20 0 0" Click="GetExchangeRateButton_Click"/>
+                            <Button x:Name="GetExchangeBut" Content="{DynamicResource GetExchangeBut}" Grid.Row="5" Background="{DynamicResource AppPrimaryBrush}" Foreground="White" BorderBrush="{DynamicResource AppPrimaryHoverBrush}" BorderThickness="1.5" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200" Height="50" Margin="0 20 0 0" Click="GetExchangeRateButton_Click"/>
                         </Grid>
                     </Border>
                 </Border>

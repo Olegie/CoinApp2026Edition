@@ -47,6 +47,12 @@
     <v:String x:Key="Menu">MENU</v:String>
 
     <v:String x:Key="TabSeacrhCurrency">Search currency by name or select coin...</v:String>
+    <v:String x:Key="ThemeMenuTitle">Theme</v:String>
+    <v:String x:Key="LightTheme">Light</v:String>
+    <v:String x:Key="DarkTheme">Dark</v:String>
+    <v:String x:Key="LanguageMenuTitle">Language</v:String>
+    <v:String x:Key="EnglishLanguage">English</v:String>
+    <v:String x:Key="UkrainianLanguage">Ukrainian</v:String>
 
     <v:String x:Key="LoadingPanel">Loading...</v:String>
 

@@ -47,6 +47,12 @@
 
 
     <v:String x:Key="TabSeacrhCurrency">Шукайте валюту за назвою або виберіть її...</v:String>
+    <v:String x:Key="ThemeMenuTitle">Тема</v:String>
+    <v:String x:Key="LightTheme">Світла</v:String>
+    <v:String x:Key="DarkTheme">Темна</v:String>
+    <v:String x:Key="LanguageMenuTitle">Мова</v:String>
+    <v:String x:Key="EnglishLanguage">Англійська</v:String>
+    <v:String x:Key="UkrainianLanguage">Українська</v:String>
     <v:String x:Key="LoadingPanel">Завантаження...</v:String>
 
     <v:String x:Key="TabForSearchBox">UKR</v:String>

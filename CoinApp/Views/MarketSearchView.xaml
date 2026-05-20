@@ -7,14 +7,19 @@
          mc:Ignorable="d"
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
          xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:controls="clr-namespace:CoinApp.Controls"
+         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
          WindowStartupLocation="CenterScreen"
          WindowStyle="None"
-         ResizeMode="NoResize"
-         AllowsTransparency="True"
-         Background="Transparent"
+         ResizeMode="CanResizeWithGrip"
+         AllowsTransparency="False"
+         Background="{DynamicResource AppSurfaceBrush}"
          Icon="/Images/MainIconImg.jpg"
-         Title="Coin App" Height="720" Width="1080">
-    <Border Background ="AliceBlue" CornerRadius="15" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseDown="Border_MouseDown">
+         Title="Coin App" Height="720" Width="1080" MinHeight="620" MinWidth="920">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0" CornerRadius="18" GlassFrameThickness="0" ResizeBorderThickness="8" UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Border Background="{DynamicResource AppSurfaceBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="18" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseDown="Border_MouseDown">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width = "250"/>
@@ -41,7 +46,7 @@
                     <TextBlock Text="Coin App" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" Margin="5,20,0,40"/>
                 </Grid>
 
-                <Border Grid.Row="1" Background="#28668f" CornerRadius="0 5 5 0">
+                <Border Grid.Row="1" Background="{DynamicResource AppPrimaryBrush}" CornerRadius="0 10 10 0">
                     <DockPanel>
 
                         <!--Menu titles and button-->
@@ -88,15 +93,15 @@
 
                 <!--Page title-->
                 <TextBlock x:Name="MarketSearchPageTitle"  Text="{DynamicResource MarketSearchPageTitle}" Grid.Row="1" FontSize="32" FontWeight="SemiBold" Margin="40,20,0,0"
-                HorizontalAlignment="Left" Foreground="#121518" Grid.RowSpan="6"/>
+                HorizontalAlignment="Left" Foreground="{DynamicResource AppTextBrush}" Grid.RowSpan="6"/>
 
                 <!--Separator-->
-                <Separator Height="8" Grid.Row="2" Background="Black" Margin="0 75 0 10"/>
+                <Separator Height="6" Grid.Row="2" Background="{DynamicResource AppSeparatorBrush}" Margin="0 75 0 10"/>
 
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
                     <TextBlock x:Name="Selected_Coin_Tb" Text="{DynamicResource Selected_Coin_Tb}" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="10 0 0 0"/>
                     <TextBlock x:Name="CoinNameTextBlock" Text="{Binding SelectedCurrencyName}" VerticalAlignment="Center" FontSize="20" FontWeight="SemiBold" Margin="8 0 5 0"/>
-                    <Border BorderBrush="#999fa8" BorderThickness="2" CornerRadius="5" Width="202" Margin="15 0 0 0">
+                    <Border Background="{DynamicResource AppInputBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1.5" CornerRadius="12" Width="220" Margin="15 0 0 0">
                         <ComboBox x:Name="CurrencyComboBox"
                           Width="180"
                           Height="30"
@@ -149,7 +154,7 @@
 
 
                 <!-- Панель завантаження -->
-                <Grid x:Name="LoadingPanel" Visibility="Collapsed" Background="AliceBlue" Opacity="0.8" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0 115">
+                <Grid x:Name="LoadingPanel" Visibility="Collapsed" Background="{DynamicResource AppSurfaceBrush}" Opacity="0.88" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0 115">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="300" Height="150">
                         <!-- Повідомленя -->
                         <TextBlock Text="{DynamicResource LoadingPanel}" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="11 -3 0 0"/>

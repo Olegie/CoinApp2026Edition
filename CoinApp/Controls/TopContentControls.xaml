@@ -8,31 +8,38 @@
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="800">
 
-    <Border>
+    <Border Background="Transparent" ClipToBounds="False">
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
             <!-- Search TextBox with AutoComplete -->
-            <Grid Width="300" HorizontalAlignment="Left" Height="50">
-                <Border BorderBrush="#999fa8" BorderThickness="2" CornerRadius="8" Margin="40,0,-70,0">
-                    <TextBox x:Name="searchTextBox"
-                             Text="{DynamicResource TabSeacrhCurrency}"
-                             Foreground="#575859"
-                             FontSize="12"
-                             Margin="6 5 50 7"
-                             GotFocus="SearchTextBox_GotFocus"
-                             LostFocus="SearchTextBox_LostFocus"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Padding="15 10"
-                             Style="{StaticResource textboxSearch}"
-                             Width="271"
-                             TextChanged="SearchTextBox_TextChanged"/>
+            <Grid x:Name="SearchContainer" Grid.Column="0" MinWidth="220" MaxWidth="420" HorizontalAlignment="Left" Height="44" Margin="40 3 20 0">
+                <Border Background="{DynamicResource AppInputBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1.5" CornerRadius="14">
+                    <Grid>
+                        <TextBox x:Name="searchTextBox"
+                                 Text="{DynamicResource TabSeacrhCurrency}"
+                                 Foreground="{DynamicResource AppMutedTextBrush}"
+                                 FontSize="12"
+                                 Margin="8 3 44 3"
+                                 GotFocus="SearchTextBox_GotFocus"
+                                 LostFocus="SearchTextBox_LostFocus"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="12 9"
+                                 Style="{StaticResource textboxSearch}"
+                                 TextChanged="SearchTextBox_TextChanged"/>
+                    </Grid>
                 </Border>
                 <Button Style="{StaticResource topButton}"
-                        Margin="0 0 -58 0"
+                        Width="34"
+                        Height="34"
+                        Margin="0 0 5 0"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right" Click="Go_To_Coin_Page_Click">
-                    <Icon:PackIconMaterial Kind="Magnify" Width="20" Height="20" Foreground="#999fa8" />
+                    <Icon:PackIconMaterial Kind="Magnify" Width="20" Height="20" Foreground="{DynamicResource AppMutedTextBrush}" />
                 </Button>
             </Grid>
 
@@ -43,11 +50,11 @@
                    StaysOpen="False"
                    AllowsTransparency="True"
                    PopupAnimation="Slide">
-                <Border Background="White" BorderBrush="#999fa8" BorderThickness="2" CornerRadius="8">
+                <Border Background="{DynamicResource AppPopupBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="2" CornerRadius="12">
                     <ListBox x:Name="autoCompleteListBox"
                              BorderThickness="0"
-                             Background="White"
-                             Foreground="#575859"
+                             Background="{DynamicResource AppPopupBrush}"
+                             Foreground="{DynamicResource AppTextBrush}"
                              SelectionChanged="AutoCompleteListBox_SelectionChanged"
                              MaxHeight="200">
                         <!-- Items will be populated programmatically -->
@@ -56,34 +63,69 @@
             </Popup>
 
             <!--Top settings buttons-->
-            <Button Style="{StaticResource topButton}" Margin="0 0 0 2" HorizontalAlignment="Right" Click="Close_This_Window_Button_Click">
-                <TextBlock Text="X" FontSize="25" FontWeight="Bold"/>
-            </Button>
-            <StackPanel Margin="0 5 40 0" HorizontalAlignment="Right">
-                <Button Style="{StaticResource topButton}"   Click="Change_Lang_Button_Click">
-                    <Icon:PackIconMaterial Kind="Cog" Width="35" Height="20"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0 5 0 0" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Button x:Name="ThemeButton" Style="{StaticResource topButton}" Click="Theme_Button_Click" ToolTip="{DynamicResource ThemeMenuTitle}">
+                    <Icon:PackIconMaterial Kind="ThemeLightDark" Width="24" Height="24"/>
                 </Button>
-                <!-- Popup для ComboBox -->
-                <Popup x:Name="LanguagePopup"
-                   Placement="Bottom"
-                   PlacementTarget="{Binding ElementName=Change_Lang_Button}"
-                   StaysOpen="False"
-                   AllowsTransparency="True"
-                       Width="45">
-                    <Border Background="White" BorderBrush="Gray" BorderThickness="1" Padding="1">
-                        <ComboBox x:Name="LanguageComboBox"
-                  Width="40" FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Center" SelectionChanged="LanguageComboBox_SelectionChanged">
-                            <ComboBoxItem Content="ENG" />
-                            <ComboBoxItem Content="УКР" />
-                        </ComboBox>
-                    </Border>
-                </Popup>
+
+                <Button x:Name="LanguageButton" Style="{StaticResource topButton}" Click="Language_Button_Click" ToolTip="{DynamicResource LanguageMenuTitle}">
+                    <Icon:PackIconMaterial Kind="Cog" Width="24" Height="24"/>
+                </Button>
+
+                <Button Style="{StaticResource topButton}" Click="Close_This_Window_Button_Click">
+                    <Icon:PackIconMaterial Kind="Close" Width="24" Height="24"/>
+                </Button>
             </StackPanel>
 
+            <Popup x:Name="ThemePopup"
+                   Placement="Bottom"
+                   PlacementTarget="{Binding ElementName=ThemeButton}"
+                   StaysOpen="False"
+                   AllowsTransparency="True"
+                   PopupAnimation="Fade">
+                <Border Background="{DynamicResource AppPopupBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="14" Padding="8" MinWidth="170">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource ThemeMenuTitle}" Foreground="{DynamicResource AppMutedTextBrush}" FontSize="11" FontWeight="SemiBold" Margin="8 2 8 6"/>
+                        <Button Style="{StaticResource popupMenuButton}" Tag="Light" Click="ThemeOption_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="WhiteBalanceSunny" Width="16" Height="16" Margin="0 0 10 0"/>
+                                <TextBlock Text="{DynamicResource LightTheme}"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource popupMenuButton}" Tag="Dark" Click="ThemeOption_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="WeatherNight" Width="16" Height="16" Margin="0 0 10 0"/>
+                                <TextBlock Text="{DynamicResource DarkTheme}"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Popup>
 
-            <Button Style="{StaticResource topButton}" Margin="0 0 80 0" HorizontalAlignment="Right">
-                <Icon:PackIconMaterial Kind="ThemeLightDark" Width="35" Height="20"/>
-            </Button>
+            <Popup x:Name="LanguagePopup"
+                   Placement="Bottom"
+                   PlacementTarget="{Binding ElementName=LanguageButton}"
+                   StaysOpen="False"
+                   AllowsTransparency="True"
+                   PopupAnimation="Fade">
+                <Border Background="{DynamicResource AppPopupBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="14" Padding="8" MinWidth="170">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource LanguageMenuTitle}" Foreground="{DynamicResource AppMutedTextBrush}" FontSize="11" FontWeight="SemiBold" Margin="8 2 8 6"/>
+                        <Button Style="{StaticResource popupMenuButton}" Tag="ENG" Click="LanguageOption_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="EN" Width="24" FontWeight="SemiBold"/>
+                                <TextBlock Text="{DynamicResource EnglishLanguage}"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource popupMenuButton}" Tag="UKR" Click="LanguageOption_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="UK" Width="24" FontWeight="SemiBold"/>
+                                <TextBlock Text="{DynamicResource UkrainianLanguage}"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Popup>
 
             <TextBlock x:Name="TabForSearchBox" Text="{DynamicResource TabForSearchBox}" Foreground="Transparent" Height="1" Width="1"/>
         </Grid>
