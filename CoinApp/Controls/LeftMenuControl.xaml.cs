@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
 using CoinApp.Utilities;
 using CoinApp.Views;
 
@@ -16,179 +13,47 @@ namespace CoinApp.Controls
             InitializeComponent();
         }
 
-        // перехід до головного вікна
-        private async void Main_Button_Click(object sender, RoutedEventArgs e)
+        private void Main_Button_Click(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-
-            if (window == null)
-            {
-                MessageBox.Show("Window not found."); // Обробка випадку, коли вікно не знайдене
-                return;
-            }
-
-            // Збереження стану вікна
-            WindowStateManager.Width = window.Width;
-            WindowStateManager.Height = window.Height;
-            WindowStateManager.Top = window.Top;
-            WindowStateManager.Left = window.Left;
-            WindowStateManager.IsMaximized = window.WindowState == WindowState.Maximized;
-
-            MainWindow mainWin = new MainWindow
-            {
-                Width = WindowStateManager.Width,
-                Height = WindowStateManager.Height,
-                Top = WindowStateManager.Top,
-                Left = WindowStateManager.Left,
-                WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-            };
-
-            mainWin.Show();
-
-            // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-            await Task.Delay(100);
-
-            window.Close(); // Закриття поточного вікна
+            NavigateTo(() => new MainWindow());
         }
 
-        //перехід до CoinView
-        private async void Coin_Button_Click(object sender, RoutedEventArgs e)
+        private void Coin_Button_Click(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-
-            if (window == null)
-            {
-                MessageBox.Show("Window not found."); // Обробка випадку, коли вікно не знайдене
-                return;
-            }
-
-            // Збереження стану вікна
-            WindowStateManager.Width = window.Width;
-            WindowStateManager.Height = window.Height;
-            WindowStateManager.Top = window.Top;
-            WindowStateManager.Left = window.Left;
-            WindowStateManager.IsMaximized = window.WindowState == WindowState.Maximized;
-
-            CoinView coinWin = new CoinView(null)
-            {
-                Width = WindowStateManager.Width,
-                Height = WindowStateManager.Height,
-                Top = WindowStateManager.Top,
-                Left = WindowStateManager.Left,
-                WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-            };
-
-            coinWin.Show();
-
-            // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-            await Task.Delay(100);
-
-            window.Close(); // Закриття поточного вікна
+            NavigateTo(() => new CoinView(string.Empty));
         }
 
-        // Перехід до MarketView
-        private async void Markets_Button_Click(object sender, RoutedEventArgs e)
+        private void Markets_Button_Click(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-
-            if (window == null)
-            {
-                MessageBox.Show("Window not found."); // Обробка випадку, коли вікно не знайдене
-                return;
-            }
-
-            // Збереження стану вікна
-            WindowStateManager.Width = window.Width;
-            WindowStateManager.Height = window.Height;
-            WindowStateManager.Top = window.Top;
-            WindowStateManager.Left = window.Left;
-            WindowStateManager.IsMaximized = window.WindowState == WindowState.Maximized;
-
-            MarketsView marketsView = new MarketsView
-            {
-                Width = WindowStateManager.Width,
-                Height = WindowStateManager.Height,
-                Top = WindowStateManager.Top,
-                Left = WindowStateManager.Left,
-                WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-            };
-
-            marketsView.Show();
-
-            // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-            await Task.Delay(100);
-
-            window.Close(); // Закриття поточного вікна
+            NavigateTo(() => new MarketsView());
         }
 
-        private async void Markets_Search_Button_Click(object sender, RoutedEventArgs e)
+        private void Markets_Search_Button_Click(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-
-            if (window == null)
-            {
-                MessageBox.Show("Window not found."); // Обробка випадку, коли вікно не знайдене
-                return;
-            }
-
-            // Збереження стану вікна
-            WindowStateManager.Width = window.Width;
-            WindowStateManager.Height = window.Height;
-            WindowStateManager.Top = window.Top;
-            WindowStateManager.Left = window.Left;
-            WindowStateManager.IsMaximized = window.WindowState == WindowState.Maximized;
-
-            MarketSearchView marketsSearch_View = new MarketSearchView(null)
-            {
-                Width = WindowStateManager.Width,
-                Height = WindowStateManager.Height,
-                Top = WindowStateManager.Top,
-                Left = WindowStateManager.Left,
-                WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-            };
-
-            marketsSearch_View.Show();
-
-            // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-            await Task.Delay(100);
-
-            window.Close(); // Закриття поточного вікна
+            NavigateTo(() => new MarketSearchView(string.Empty));
         }
 
-
-        // Перехід до ConvertView
-        private async void Convert_Button_Click(object sender, RoutedEventArgs e)
+        private void Convert_Button_Click(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(this);
+            NavigateTo(() => new ConvertView());
+        }
 
-            if (window == null)
+        private void NavigateTo(Func<Window> createWindow)
+        {
+            var currentWindow = Window.GetWindow(this);
+
+            if (currentWindow == null)
             {
-                MessageBox.Show("Window not found."); // Обробка випадку, коли вікно не знайдене
+                MessageBox.Show("Window not found.");
                 return;
             }
 
-            // Збереження стану вікна
-            WindowStateManager.Width = window.Width;
-            WindowStateManager.Height = window.Height;
-            WindowStateManager.Top = window.Top;
-            WindowStateManager.Left = window.Left;
-            WindowStateManager.IsMaximized = window.WindowState == WindowState.Maximized;
+            var nextWindow = createWindow();
+            WindowStateManager.Capture(currentWindow);
+            WindowStateManager.Apply(nextWindow);
 
-            ConvertView convertView = new ConvertView
-            {
-                Width = WindowStateManager.Width,
-                Height = WindowStateManager.Height,
-                Top = WindowStateManager.Top,
-                Left = WindowStateManager.Left,
-                WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-            };
-
-            convertView.Show();
-
-            // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-            await Task.Delay(100);
-
-            window.Close(); // Закриття поточного вікна
+            nextWindow.Show();
+            currentWindow.Close();
         }
     }
 }

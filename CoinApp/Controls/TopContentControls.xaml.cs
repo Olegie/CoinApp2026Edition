@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 using CoinApp.Utilities;
 using CoinApp.Views;
 using System.Globalization;
+using MahApps.Metro.IconPacks;
 
 namespace CoinApp.Controls
 {
     public partial class TopContentControls : UserControl
     {
         private readonly ApiService _apiService; // Сервіс для взаємодії з API
-        private List<string> _currencyNames; // Список всіх назв валют
+        private List<string> _currencyNames = new(); // Список всіх назв валют
 
         private bool _isLanguagePopupOpen;
         private bool _isThemePopupOpen;
@@ -26,6 +27,25 @@ namespace CoinApp.Controls
             InitializeComponent();
             _apiService = new ApiService(); // Ініціалізація ApiService
             LoadCurrencyNames(); // Завантаження назв валют
+            Loaded += TopContentControls_Loaded;
+        }
+
+        private void TopContentControls_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Window.GetWindow(this) is Window window)
+            {
+                window.StateChanged -= Window_StateChanged;
+                window.StateChanged += Window_StateChanged;
+                UpdateMaximizeButton(window);
+            }
+        }
+
+        private void Window_StateChanged(object? sender, EventArgs e)
+        {
+            if (sender is Window window)
+            {
+                UpdateMaximizeButton(window);
+            }
         }
 
         // Асинхронний метод для завантаження назв валют
@@ -47,7 +67,13 @@ namespace CoinApp.Controls
         // Обробник зміни тексту в TextBox
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string searchText = searchTextBox.Text.ToLower(); // Отримання введеного тексту в нижньому регістрі
+            if (autoCompletePopup == null || autoCompleteListBox == null)
+            {
+                return;
+            }
+
+            var textBox = sender as TextBox ?? searchTextBox;
+            string searchText = textBox.Text?.ToLowerInvariant() ?? string.Empty; // Отримання введеного тексту в нижньому регістрі
 
             if (string.IsNullOrEmpty(searchText))
             {
@@ -118,7 +144,7 @@ namespace CoinApp.Controls
         }
 
         // Метод для переходу на сторінку з інформацією про валюту
-        private async void Go_To_Coin_Page(string selectedName)
+        private void Go_To_Coin_Page(string selectedName)
         {
             Window window = Window.GetWindow(this);
 
@@ -128,29 +154,12 @@ namespace CoinApp.Controls
                 return;
             }
 
-            // Збереження стану вікна
-            WindowStateManager.Width = window.Width;
-            WindowStateManager.Height = window.Height;
-            WindowStateManager.Top = window.Top;
-            WindowStateManager.Left = window.Left;
-            WindowStateManager.IsMaximized = window.WindowState == WindowState.Maximized;
+            var coinWin = new CoinView(selectedName.ToLower());
+            WindowStateManager.Capture(window);
+            WindowStateManager.Apply(coinWin);
 
-            // Створення нового вікна для перегляду інформації про валюту
-            CoinView coin_win = new CoinView(selectedName.ToLower())
-            {
-                Width = WindowStateManager.Width,
-                Height = WindowStateManager.Height,
-                Top = WindowStateManager.Top,
-                Left = WindowStateManager.Left,
-                WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-            };
-
-            coin_win.Show();
-
-            // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-            await Task.Delay(100);
-
-            window.Close(); // Закриття поточного вікна
+            coinWin.Show();
+            window.Close();
 
         }
 
@@ -226,6 +235,37 @@ namespace CoinApp.Controls
             _isLanguagePopupOpen = false;
             LanguagePopup.IsOpen = false;
             ThemePopup.IsOpen = _isThemePopupOpen;
+        }
+
+        private void Minimize_Window_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Window.GetWindow(this) is Window window)
+            {
+                window.WindowState = WindowState.Minimized;
+            }
+        }
+
+        private void Maximize_Window_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Window.GetWindow(this) is Window window)
+            {
+                WindowStateManager.ToggleMaximize(window);
+                UpdateMaximizeButton(window);
+            }
+        }
+
+        private void UpdateMaximizeButton(Window window)
+        {
+            if (window.WindowState == WindowState.Maximized)
+            {
+                MaximizeIcon.Kind = PackIconMaterialKind.WindowRestore;
+                MaximizeButton.ToolTip = FindResource("RestoreWindow");
+            }
+            else
+            {
+                MaximizeIcon.Kind = PackIconMaterialKind.WindowMaximize;
+                MaximizeButton.ToolTip = FindResource("MaximizeWindow");
+            }
         }
 
         private void ThemeOption_Click(object sender, RoutedEventArgs e)

@@ -53,6 +53,9 @@
     <v:String x:Key="LanguageMenuTitle">Мова</v:String>
     <v:String x:Key="EnglishLanguage">Англійська</v:String>
     <v:String x:Key="UkrainianLanguage">Українська</v:String>
+    <v:String x:Key="MinimizeWindow">Згорнути</v:String>
+    <v:String x:Key="MaximizeWindow">Розгорнути</v:String>
+    <v:String x:Key="RestoreWindow">Відновити</v:String>
     <v:String x:Key="LoadingPanel">Завантаження...</v:String>
 
     <v:String x:Key="TabForSearchBox">UKR</v:String>

@@ -14,7 +14,6 @@ namespace CoinApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool IsMaximized = false; // Максимізація вікна
         private MainViewModel _viewModel;
 
         public MainWindow()
@@ -72,18 +71,7 @@ namespace CoinApp
         {
             if (e.ClickCount == 2)
             {
-                if (IsMaximized)
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Width = 1080;
-                    this.Height = 720;
-                    IsMaximized = false;
-                }
-                else
-                {
-                    this.WindowState = WindowState.Maximized;
-                    IsMaximized = true;
-                }
+                WindowStateManager.ToggleMaximize(this);
             }
         }
 
@@ -115,7 +103,7 @@ namespace CoinApp
             }
         }
 
-        private async void Go_To_Coin_Page_Click(object sender, RoutedEventArgs e)
+        private void Go_To_Coin_Page_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
             {
@@ -124,29 +112,11 @@ namespace CoinApp
 
                 if (!string.IsNullOrEmpty(currencyId))
                 {
-                    // Збереження стану поточного вікна
-                    WindowStateManager.Width = this.Width;
-                    WindowStateManager.Height = this.Height;
-                    WindowStateManager.Top = this.Top;
-                    WindowStateManager.Left = this.Left;
-                    WindowStateManager.IsMaximized = this.WindowState == WindowState.Maximized;
-
-                    // Створення нового вікна для перегляду детальної інформації про валюту
-                    CoinView coinWin = new CoinView(currencyId)
-                    {
-                        Width = WindowStateManager.Width,
-                        Height = WindowStateManager.Height,
-                        Top = WindowStateManager.Top,
-                        Left = WindowStateManager.Left,
-                        WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-                    };
+                    var coinWin = new CoinView(currencyId);
+                    WindowStateManager.Capture(this);
+                    WindowStateManager.Apply(coinWin);
 
                     coinWin.Show();
-
-                    // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-                    await Task.Delay(100);
-
-                    // Закриття поточного вікна
                     this.Close();
                 }
                 else

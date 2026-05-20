@@ -25,7 +25,6 @@ namespace CoinApp.Views
     public partial class CoinView : Window
     {
 
-        private bool IsMaximized = false; //максимізація вікна
         private string _coinId;
 
         private CoinViewModel _viewModel;
@@ -50,29 +49,11 @@ namespace CoinApp.Views
 
             if (!string.IsNullOrEmpty(currencyId))
             {
-                // Збереження стану поточного вікна
-                WindowStateManager.Width = this.Width;
-                WindowStateManager.Height = this.Height;
-                WindowStateManager.Top = this.Top;
-                WindowStateManager.Left = this.Left;
-                WindowStateManager.IsMaximized = this.WindowState == WindowState.Maximized;
+                var marketSearchWin = new MarketSearchView(currencyId);
+                WindowStateManager.Capture(this);
+                WindowStateManager.Apply(marketSearchWin);
 
-                // Створення нового вікна для перегляду детальної інформації про валюту
-                MarketSearchView MarketSearchWin = new MarketSearchView(currencyId)
-                {
-                    Width = WindowStateManager.Width,
-                    Height = WindowStateManager.Height,
-                    Top = WindowStateManager.Top,
-                    Left = WindowStateManager.Left,
-                    WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-                };
-
-                MarketSearchWin.Show();
-
-                // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-                await Task.Delay(100);
-
-                // Закриття поточного вікна
+                marketSearchWin.Show();
                 this.Close();
             }
             else
@@ -108,18 +89,7 @@ namespace CoinApp.Views
         {
             if (e.ClickCount == 2)
             {
-                if (IsMaximized)
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Width = 1080;
-                    this.Height = 720;
-                    IsMaximized = false;
-                }
-                else
-                {
-                    this.WindowState = WindowState.Maximized;
-                    IsMaximized = true;
-                }
+                WindowStateManager.ToggleMaximize(this);
             }
         }
 

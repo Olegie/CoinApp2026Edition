@@ -1,5 +1,6 @@
 ﻿using CoinApp.ViewModels;
 using System;
+using CoinApp.Utilities;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -21,8 +22,6 @@ namespace CoinApp.Views
     /// </summary>
     public partial class ConvertView : Window
     {
-        private bool IsMaximized = false; // Максимізація вікна
-
         private ConvertViewModel _viewModel;
         public ConvertView()
         {
@@ -161,18 +160,7 @@ namespace CoinApp.Views
         {
             if (e.ClickCount == 2)
             {
-                if (IsMaximized)
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Width = 1080;
-                    this.Height = 720;
-                    IsMaximized = false;
-                }
-                else
-                {
-                    this.WindowState = WindowState.Maximized;
-                    IsMaximized = true;
-                }
+                WindowStateManager.ToggleMaximize(this);
             }
         }
 

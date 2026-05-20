@@ -53,6 +53,9 @@
     <v:String x:Key="LanguageMenuTitle">Language</v:String>
     <v:String x:Key="EnglishLanguage">English</v:String>
     <v:String x:Key="UkrainianLanguage">Ukrainian</v:String>
+    <v:String x:Key="MinimizeWindow">Minimize</v:String>
+    <v:String x:Key="MaximizeWindow">Maximize</v:String>
+    <v:String x:Key="RestoreWindow">Restore</v:String>
 
     <v:String x:Key="LoadingPanel">Loading...</v:String>
 

@@ -72,6 +72,14 @@
                     <Icon:PackIconMaterial Kind="Cog" Width="24" Height="24"/>
                 </Button>
 
+                <Button Style="{StaticResource topButton}" Click="Minimize_Window_Button_Click" ToolTip="{DynamicResource MinimizeWindow}">
+                    <Icon:PackIconMaterial Kind="WindowMinimize" Width="22" Height="22"/>
+                </Button>
+
+                <Button x:Name="MaximizeButton" Style="{StaticResource topButton}" Click="Maximize_Window_Button_Click" ToolTip="{DynamicResource MaximizeWindow}">
+                    <Icon:PackIconMaterial x:Name="MaximizeIcon" Kind="WindowMaximize" Width="20" Height="20"/>
+                </Button>
+
                 <Button Style="{StaticResource topButton}" Click="Close_This_Window_Button_Click">
                     <Icon:PackIconMaterial Kind="Close" Width="24" Height="24"/>
                 </Button>
