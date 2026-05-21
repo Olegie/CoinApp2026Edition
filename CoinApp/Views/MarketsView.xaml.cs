@@ -22,7 +22,6 @@ namespace CoinApp.Views
     public partial class MarketsView : Window
     {
 
-        private bool IsMaximized = false; //максимізація вікна
         private MarketsViewModel _viewModel;
         public MarketsView()
         {
@@ -36,18 +35,7 @@ namespace CoinApp.Views
         {
             if (e.ClickCount == 2)
             {
-                if (IsMaximized)
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Width = 1080;
-                    this.Height = 720;
-                    IsMaximized = false;
-                }
-                else
-                {
-                    this.WindowState = WindowState.Maximized;
-                    IsMaximized = true;
-                }
+                WindowStateManager.ToggleMaximize(this);
             }
         }
 

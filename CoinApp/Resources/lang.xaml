@@ -35,6 +35,9 @@
     <v:String x:Key="CoinRank">Market rank:</v:String>
     <v:String x:Key="MarketCap">Market cap:</v:String>
     <v:String x:Key="CoinSup">Supply:</v:String>
+    <v:String x:Key="PriceHistoryTitle">Price history</v:String>
+    <v:String x:Key="ResetHistoryView">Reset view</v:String>
+    <v:String x:Key="HistoryZoomHint">Mouse wheel zooms the chart; drag to pan.</v:String>
     
     <!--Left Menu-->
     <v:String x:Key="ExitTb">Exit</v:String>
@@ -47,6 +50,15 @@
     <v:String x:Key="Menu">MENU</v:String>
 
     <v:String x:Key="TabSeacrhCurrency">Search currency by name or select coin...</v:String>
+    <v:String x:Key="ThemeMenuTitle">Theme</v:String>
+    <v:String x:Key="LightTheme">Light</v:String>
+    <v:String x:Key="DarkTheme">Dark</v:String>
+    <v:String x:Key="LanguageMenuTitle">Language</v:String>
+    <v:String x:Key="EnglishLanguage">English</v:String>
+    <v:String x:Key="UkrainianLanguage">Ukrainian</v:String>
+    <v:String x:Key="MinimizeWindow">Minimize</v:String>
+    <v:String x:Key="MaximizeWindow">Maximize</v:String>
+    <v:String x:Key="RestoreWindow">Restore</v:String>
 
     <v:String x:Key="LoadingPanel">Loading...</v:String>
 

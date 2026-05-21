@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using CoinApp.Services;
 using System.Collections.Generic;
@@ -9,21 +10,42 @@ using System.Threading.Tasks;
 using CoinApp.Utilities;
 using CoinApp.Views;
 using System.Globalization;
+using MahApps.Metro.IconPacks;
 
 namespace CoinApp.Controls
 {
     public partial class TopContentControls : UserControl
     {
         private readonly ApiService _apiService; // Сервіс для взаємодії з API
-        private List<string> _currencyNames; // Список всіх назв валют
+        private List<string> _currencyNames = new(); // Список всіх назв валют
 
-        private bool IsLanguagePopupOpen = false;
+        private bool _isLanguagePopupOpen;
+        private bool _isThemePopupOpen;
 
         public TopContentControls()
         {
             InitializeComponent();
             _apiService = new ApiService(); // Ініціалізація ApiService
             LoadCurrencyNames(); // Завантаження назв валют
+            Loaded += TopContentControls_Loaded;
+        }
+
+        private void TopContentControls_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Window.GetWindow(this) is Window window)
+            {
+                window.StateChanged -= Window_StateChanged;
+                window.StateChanged += Window_StateChanged;
+                UpdateMaximizeButton(window);
+            }
+        }
+
+        private void Window_StateChanged(object? sender, EventArgs e)
+        {
+            if (sender is Window window)
+            {
+                UpdateMaximizeButton(window);
+            }
         }
 
         // Асинхронний метод для завантаження назв валют
@@ -45,7 +67,13 @@ namespace CoinApp.Controls
         // Обробник зміни тексту в TextBox
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string searchText = searchTextBox.Text.ToLower(); // Отримання введеного тексту в нижньому регістрі
+            if (autoCompletePopup == null || autoCompleteListBox == null)
+            {
+                return;
+            }
+
+            var textBox = sender as TextBox ?? searchTextBox;
+            string searchText = textBox.Text?.ToLowerInvariant() ?? string.Empty; // Отримання введеного тексту в нижньому регістрі
 
             if (string.IsNullOrEmpty(searchText))
             {
@@ -77,7 +105,10 @@ namespace CoinApp.Controls
         // Обробник отримання фокусу на TextBox
         private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            searchTextBox.Text = "";
+            if (searchTextBox.Text == FindResource("TabSeacrhCurrency") as string)
+            {
+                searchTextBox.Text = "";
+            }
         }
 
         // Обробник втрати фокусу на TextBox
@@ -85,14 +116,7 @@ namespace CoinApp.Controls
         {
             if (string.IsNullOrWhiteSpace(searchTextBox.Text))
             {
-                if (TabForSearchBox.Text == "ENG")
-                {
-                    searchTextBox.Text = "Search currency by name or select coin..."; // Відновлення тексту при втраті фокусу
-                }
-                else 
-                {
-                    searchTextBox.Text = "Шукайте валюту за назвою або виберіть її...";
-                }      
+                searchTextBox.Text = FindResource("TabSeacrhCurrency") as string;
             }
 
             autoCompletePopup.IsOpen = false;
@@ -120,7 +144,7 @@ namespace CoinApp.Controls
         }
 
         // Метод для переходу на сторінку з інформацією про валюту
-        private async void Go_To_Coin_Page(string selectedName)
+        private void Go_To_Coin_Page(string selectedName)
         {
             Window window = Window.GetWindow(this);
 
@@ -130,143 +154,177 @@ namespace CoinApp.Controls
                 return;
             }
 
-            // Збереження стану вікна
-            WindowStateManager.Width = window.Width;
-            WindowStateManager.Height = window.Height;
-            WindowStateManager.Top = window.Top;
-            WindowStateManager.Left = window.Left;
-            WindowStateManager.IsMaximized = window.WindowState == WindowState.Maximized;
+            var coinWin = new CoinView(selectedName.ToLower());
+            WindowStateManager.Capture(window);
+            WindowStateManager.Apply(coinWin);
 
-            // Створення нового вікна для перегляду інформації про валюту
-            CoinView coin_win = new CoinView(selectedName.ToLower())
-            {
-                Width = WindowStateManager.Width,
-                Height = WindowStateManager.Height,
-                Top = WindowStateManager.Top,
-                Left = WindowStateManager.Left,
-                WindowState = WindowStateManager.IsMaximized ? WindowState.Maximized : WindowState.Normal
-            };
-
-            coin_win.Show();
-
-            // Додатково, затримка для забезпечення відкриття нового вікна перед закриттям старого
-            await Task.Delay(100);
-
-            window.Close(); // Закриття поточного вікна
+            coinWin.Show();
+            window.Close();
 
         }
 
         // Обробник натискання кнопки для переходу на сторінку з інформацією про валюту
         private void Go_To_Coin_Page_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(searchTextBox.Text))
+            if (!string.IsNullOrWhiteSpace(searchTextBox.Text) &&
+                searchTextBox.Text != FindResource("TabSeacrhCurrency") as string)
             {
                 Go_To_Coin_Page(searchTextBox.Text); // Передача тексту пошуку у CoinView
             }
             else
             {
-                MessageBox.Show("Please, Input correct text!"); 
+                MessageBox.Show("Please, input a currency name.");
             }
         }
 
-        private void Change_Lang_Button_Click(object sender, RoutedEventArgs e)
+        private void Language_Button_Click(object sender, RoutedEventArgs e)
         {
-            IsLanguagePopupOpen = !IsLanguagePopupOpen;
-            LanguagePopup.IsOpen = IsLanguagePopupOpen;
+            _isLanguagePopupOpen = !_isLanguagePopupOpen;
+            _isThemePopupOpen = false;
+            ThemePopup.IsOpen = false;
+            LanguagePopup.IsOpen = _isLanguagePopupOpen;
         }
 
-        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LanguageOption_Click(object sender, RoutedEventArgs e)
         {
-            // Перевірка, чи sender не є null і чи sender є ComboBox
-            if (sender is ComboBox comboBox)
+            if (sender is Button button && button.Tag is string languageCode)
             {
-                // Перевірка, чи вибраний елемент не є null
-                if (comboBox.SelectedItem is ComboBoxItem selectedItem)
-                {
-                    // Перевірка, чи Content вибраного елемента не є null
-                    if (selectedItem.Content != null)
-                    {
-                        // Отримання коду мови з вибраного елемента
-                        string languageCode = selectedItem.Content.ToString();
-
-                        // Виклик методу зміни мови
-                        ChangeLanguage(languageCode);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Selected item content is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("No item selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Invalid sender type.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ChangeLanguage(languageCode);
+                LanguagePopup.IsOpen = false;
+                _isLanguagePopupOpen = false;
             }
         }
-
-
 
         private void ChangeLanguage(string languageCode)
         {
-            // List of dictionaries that should not be removed
-            var nonLocalizationDictionaries = new List<ResourceDictionary>
-    {
-        new ResourceDictionary { Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml") },
-        new ResourceDictionary { Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml") },
-        new ResourceDictionary { Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml") },
-        new ResourceDictionary { Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Secondary/MaterialDesignColor.Lime.xaml") }
-    };
-
-            // Separate the current localization dictionaries
             var localizationDictionaries = Application.Current.Resources.MergedDictionaries
-                .Where(dict => !nonLocalizationDictionaries.Any(nonDict => dict.Source == nonDict.Source))
+                .Where(IsLocalizationDictionary)
                 .ToList();
 
-            // Remove the current localization dictionaries
             foreach (var dictionary in localizationDictionaries)
             {
                 Application.Current.Resources.MergedDictionaries.Remove(dictionary);
             }
 
-            // Create and load the new localization resource dictionary
-            ResourceDictionary newResourceDictionary = new ResourceDictionary();
-            Uri resourceUri = null;
-
-            switch (languageCode.ToUpper())
+            var resourceUri = languageCode.ToUpperInvariant() switch
             {
-                case "ENG":
-                    resourceUri = new Uri("Resources/lang.xaml", UriKind.Relative);
-                    break;
-                case "УКР":
-                    resourceUri = new Uri("Resources/lang.ukr-UKR.xaml", UriKind.Relative);
-                    break;
-                default:
-                    resourceUri = new Uri("Resources/lang.xaml", UriKind.Relative); // Default to English
-                    break;
-            }
+                "UKR" => new Uri("Resources/lang.ukr-UKR.xaml", UriKind.Relative),
+                _ => new Uri("Resources/lang.xaml", UriKind.Relative)
+            };
 
-            if (resourceUri != null)
+            try
             {
-                try
-                {
-                    newResourceDictionary.Source = resourceUri;
-                    Application.Current.Resources.MergedDictionaries.Add(newResourceDictionary);
-
-                    // Add the non-localization dictionaries back
-                    foreach (var dict in nonLocalizationDictionaries)
-                    {
-                        Application.Current.Resources.MergedDictionaries.Add(dict);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error loading resource dictionary: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = resourceUri });
+                searchTextBox.Text = FindResource("TabSeacrhCurrency") as string;
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading resource dictionary: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private static bool IsLocalizationDictionary(ResourceDictionary dictionary)
+        {
+            var source = dictionary.Source?.OriginalString;
+            return source != null && source.Contains("Resources/lang", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void Theme_Button_Click(object sender, RoutedEventArgs e)
+        {
+            _isThemePopupOpen = !_isThemePopupOpen;
+            _isLanguagePopupOpen = false;
+            LanguagePopup.IsOpen = false;
+            ThemePopup.IsOpen = _isThemePopupOpen;
+        }
+
+        private void Minimize_Window_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Window.GetWindow(this) is Window window)
+            {
+                window.WindowState = WindowState.Minimized;
+            }
+        }
+
+        private void Maximize_Window_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Window.GetWindow(this) is Window window)
+            {
+                WindowStateManager.ToggleMaximize(window);
+                UpdateMaximizeButton(window);
+            }
+        }
+
+        private void UpdateMaximizeButton(Window window)
+        {
+            if (window.WindowState == WindowState.Maximized)
+            {
+                MaximizeIcon.Kind = PackIconMaterialKind.WindowRestore;
+                MaximizeButton.ToolTip = FindResource("RestoreWindow");
+            }
+            else
+            {
+                MaximizeIcon.Kind = PackIconMaterialKind.WindowMaximize;
+                MaximizeButton.ToolTip = FindResource("MaximizeWindow");
+            }
+        }
+
+        private void ThemeOption_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string theme)
+            {
+                ApplyTheme(theme.Equals("Dark", StringComparison.OrdinalIgnoreCase));
+                ThemePopup.IsOpen = false;
+                _isThemePopupOpen = false;
+            }
+        }
+
+        private static void ApplyTheme(bool dark)
+        {
+            if (dark)
+            {
+                SetBrush("AppSurfaceBrush", "#0E141B");
+                SetBrush("AppPanelBrush", "#162832");
+                SetBrush("AppCardBrush", "#121C25");
+                SetBrush("AppCardSecondaryBrush", "#16232D");
+                SetBrush("AppCardAccentBrush", "#172B31");
+                SetBrush("AppInputBrush", "#0F1821");
+                SetBrush("AppPopupBrush", "#121C25");
+                SetBrush("AppTextBrush", "#F4F7FA");
+                SetBrush("AppMutedTextBrush", "#9AA8B5");
+                SetBrush("AppBorderBrush", "#2B3D4B");
+                SetBrush("AppSeparatorBrush", "#263744");
+                SetBrush("AppPrimaryBrush", "#0F766E");
+                SetBrush("AppPrimaryHoverBrush", "#159A91");
+                SetBrush("AppTopHoverBrush", "#1D2B36");
+                SetBrush("AppAccentBrush", "#10B981");
+                SetBrush("AppMenuTextBrush", "#F8FAFC");
+                SetBrush("AppGridLineBrush", "#243642");
+            }
+            else
+            {
+                SetBrush("AppSurfaceBrush", "#F6F8FB");
+                SetBrush("AppPanelBrush", "#D8E8F0");
+                SetBrush("AppCardBrush", "#FFFFFF");
+                SetBrush("AppCardSecondaryBrush", "#F8FBFE");
+                SetBrush("AppCardAccentBrush", "#EEF6F7");
+                SetBrush("AppInputBrush", "#FFFFFF");
+                SetBrush("AppPopupBrush", "#FFFFFF");
+                SetBrush("AppTextBrush", "#111827");
+                SetBrush("AppMutedTextBrush", "#667085");
+                SetBrush("AppBorderBrush", "#D6DEE8");
+                SetBrush("AppSeparatorBrush", "#D9E1EA");
+                SetBrush("AppPrimaryBrush", "#0F766E");
+                SetBrush("AppPrimaryHoverBrush", "#155E75");
+                SetBrush("AppTopHoverBrush", "#E9F0F6");
+                SetBrush("AppAccentBrush", "#10B981");
+                SetBrush("AppMenuTextBrush", "#F8FAFC");
+                SetBrush("AppGridLineBrush", "#E7EDF4");
+            }
+        }
+
+        private static void SetBrush(string key, string color)
+        {
+            Application.Current.Resources[key] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
         }
 
 

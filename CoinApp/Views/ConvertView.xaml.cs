@@ -1,5 +1,6 @@
 ﻿using CoinApp.ViewModels;
 using System;
+using CoinApp.Utilities;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -21,8 +22,6 @@ namespace CoinApp.Views
     /// </summary>
     public partial class ConvertView : Window
     {
-        private bool IsMaximized = false; // Максимізація вікна
-
         private ConvertViewModel _viewModel;
         public ConvertView()
         {
@@ -56,7 +55,7 @@ namespace CoinApp.Views
             }
         }
 
-        private void Swap_Button_Click(object sender, RoutedEventArgs e)
+        private async void Swap_Button_Click(object sender, RoutedEventArgs e)
         {
         
             if (string.IsNullOrEmpty(_viewModel.FirstSelectedCurrencyName) ||
@@ -71,17 +70,20 @@ namespace CoinApp.Views
             _viewModel.FirstSelectedCurrencyName = _viewModel.SecondSelectedCurrencyName;
             _viewModel.SecondSelectedCurrencyName = tempCurrency;
 
-            //зміна exchangeRate
-            _viewModel.UpdateExchangeRateAsync().ContinueWith(t =>
+            try
             {
-                if (t.IsFaulted)
-                {
-                    MessageBox.Show("Failed to update exchange rate. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            // Оновлення полів
-            UpdateUIAfterSwap();
+                //зміна exchangeRate
+                await _viewModel.UpdateExchangeRateAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to update exchange rate. Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                // Оновлення полів
+                UpdateUIAfterSwap();
+            }
         }
 
         private void UpdateUIAfterSwap()
@@ -103,10 +105,8 @@ namespace CoinApp.Views
                 return;
             }
 
-            await _viewModel.UpdateExchangeRateAsync();
-
             string amountText = InputAmountTextBox.Text;
-            amountText = amountText.Replace(',', '.');
+            amountText = amountText.Replace(',', '.').Trim();
 
             if (string.IsNullOrWhiteSpace(amountText))
             {
@@ -121,18 +121,19 @@ namespace CoinApp.Views
                 return;
             }
 
-            if (_viewModel.ExchangeRate == null)
-            {
-                MessageBox.Show("Failed to retrieve exchange rate. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (Convert.ToDecimal(amountText) < 0)
+            if (amount < 0)
             {
                 MessageBox.Show("The amount cannot be negative.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            await _viewModel.UpdateExchangeRateAsync();
+
+            if (_viewModel.ExchangeRate == null)
+            {
+                MessageBox.Show("Failed to retrieve exchange rate. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             decimal exchangeRate = _viewModel.ExchangeRate.Value;
             decimal result = exchangeRate * amount;
@@ -159,18 +160,7 @@ namespace CoinApp.Views
         {
             if (e.ClickCount == 2)
             {
-                if (IsMaximized)
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Width = 1080;
-                    this.Height = 720;
-                    IsMaximized = false;
-                }
-                else
-                {
-                    this.WindowState = WindowState.Maximized;
-                    IsMaximized = true;
-                }
+                WindowStateManager.ToggleMaximize(this);
             }
         }
 

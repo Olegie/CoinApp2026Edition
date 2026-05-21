@@ -7,15 +7,20 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:controls="clr-namespace:CoinApp.Controls"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        ResizeMode="NoResize"
-        AllowsTransparency="True"
-        Background="Transparent"
+        ResizeMode="CanResizeWithGrip"
+        AllowsTransparency="False"
+        Background="{DynamicResource AppSurfaceBrush}"
         Icon="/Images/MainIconImg.jpg"
-        Title="Coin App" Height="720" Width="1080">
+        Title="Coin App" Height="720" Width="1080" MinHeight="620" MinWidth="920">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0" CornerRadius="18" GlassFrameThickness="0" ResizeBorderThickness="8" UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
     
-    <Border Background ="AliceBlue" CornerRadius="15" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseDown="Border_MouseDown">
+    <Border Background="{DynamicResource AppSurfaceBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="18" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseDown="Border_MouseDown">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width = "250"/>
@@ -39,10 +44,10 @@
                     <!-- Додаю картинку -->
                     <Image Source="/Images/MainIconImg.jpg" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,20,0,40" RenderTransformOrigin="-1.4,0.458" Height="36" Width="25"/>
                     <!-- Додаю текстову надпись -->
-                    <TextBlock Text="Coin App" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" Margin="5,20,0,40"/>
+                    <TextBlock Text="Coin App" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource AppTextBrush}" Margin="5,20,0,40"/>
                 </Grid>
 
-                <Border Grid.Row="1" Background="#28668f" CornerRadius="0 5 5 0">
+                <Border Grid.Row="1" Background="{DynamicResource AppPrimaryBrush}" CornerRadius="0 18 18 0">
                     <DockPanel>
 
                         <!--Menu titles and button-->
@@ -52,7 +57,7 @@
                         </StackPanel>
 
                         <!--Menu separator-->
-                        <Separator Margin="25" DockPanel.Dock="Top"  Height="8" Background="#D0D0D0"/>
+                        <Separator Margin="26 16 26 20" DockPanel.Dock="Top" Height="1" Background="#80FFFFFF"/>
 
                         <!--Menu buttons-->
                         <StackPanel DockPanel.Dock="Top">
@@ -89,10 +94,10 @@
 
                 <!--Page title-->
                 <TextBlock x:Name="PageTitle"  Text="{DynamicResource PageTitle}" Grid.Row="1" FontSize="32" FontWeight="SemiBold" Margin="40,20,0,0"
-                    HorizontalAlignment="Left" Foreground="#121518" Grid.RowSpan="6"/>
+                    HorizontalAlignment="Left" Foreground="{DynamicResource AppTextBrush}" Grid.RowSpan="6"/>
 
                 <!--Separator-->
-                <Separator Height="8" Grid.Row="2" Background="Black" Margin="0 75 0 10"/>
+                <Separator Height="1" Grid.Row="2" Background="{DynamicResource AppSeparatorBrush}" Margin="0 72 0 14"/>
 
                 <!--Tab buttons-->
                 <Grid Grid.Row="3" Margin="30 0 30 0">
@@ -147,12 +152,11 @@
                 </DataGrid>
 
                 <!-- Панель завантаження -->
-                <Grid x:Name="LoadingPanel" Visibility="Collapsed" Background="AliceBlue" Opacity="0.8" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0 115">
+                <Grid x:Name="LoadingPanel" Visibility="Collapsed" Background="{DynamicResource AppSurfaceBrush}" Opacity="0.88" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0 115">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="300" Height="150">
                         <!-- Повідомленя -->
-                        <TextBlock Text="{DynamicResource LoadingPanel}" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="11 -3 0 0"/>
-                        <!-- Полоса виконання -->
-                        <ProgressBar IsIndeterminate="True" Width="200" Height="20" Margin="10" Foreground="Blue" BorderBrush="#15354a" BorderThickness="2" Background="#bfd3e0"/>
+                        <TextBlock Text="{DynamicResource LoadingPanel}" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{DynamicResource AppTextBrush}" Margin="0 0 0 14"/>
+                        <ProgressBar IsIndeterminate="True" Style="{StaticResource CircularLoadingIndicator}"/>
                     </StackPanel>
                 </Grid>
 
